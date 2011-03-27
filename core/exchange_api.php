@@ -25,9 +25,7 @@ class Exchange{
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
  
 		$contents = curl_exec($ch); 
-		
-		$contents = str_replace("&nbsp;", " ", $contents);
-		
+				
 		curl_close($ch);
 		
 		return $contents;
