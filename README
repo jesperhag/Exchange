@@ -1,0 +1,112 @@
+Contents:
+
+1. Usage
+
+2. Supported Currencies
+
+3. Errors
+
+1. Usage
+
+	To make a simple exchange you do:
+	
+		$exchange->change_from("eur")->change_to("usd")->exchange(); 
+	
+	This will return an array which looks like this:
+	(
+	'amount' => 1 (default)
+	'from_currency' => "Euro"
+	'rate' => 1.40700
+	'to_currency' => "U.S. dollars"
+	)
+	
+	Defined amount exchange:
+		
+		$exchange->change_from("eur")->change_to("usd")->amount(100)->exchange(); 
+		
+	This will return an array which looks like this:
+	(
+	'amount' => 100
+	'from_currency' => "Euro"
+	'rate' => 140.7
+	'to_currency' => "U.S. dollars"
+	)
+	
+	Defined return type:
+	
+		$exchange->change_from("eur")->change_to("usd")->exchange("rate");
+		
+	This will return a string containing the rate.
+	
+	Return JSON object:
+	
+		$exchange->change_from("eur")->change_to("usd")->exchange_json();
+		
+	This will return the same data as if the exchange() method was used, but will be returned in a JSON object instead of an array.
+	
+	Render <select> elements containing the currencies as options:
+	
+		$exchange->render_options($data);
+		
+	This will return a select element with currencies as options. $data is optional and if used it could contain a string like: 'id="from"' which 	would then give the select element an id of "from".
+
+2. Supported currencies
+
+	AUD
+	BHD
+	BRL
+	BGN
+	CLP
+	DKK
+	DOP
+	EGP
+	EUR
+	FJD
+	PHP
+	AED
+	HKD
+	INR
+	ISK
+	ILS
+	JPY
+	JOD
+	CAD
+	KES
+	CNY
+	HRK
+	KWD
+	LVL
+	LTL
+	MYR
+	MUR
+	MXN
+	NOK
+	NZD
+	PLN
+	RON
+	RUB
+	SAR
+	CHF
+	SGD
+	GBP
+	ZAR
+	TWD
+	THB
+	CZK
+	TTD
+	TRY
+	HUF
+	USD
+	SEK
+	
+3. Errors
+
+	"Invalid from exchange..." = The change_from method passed a currency which is not supported. See list above for supported currencies.
+	
+	"Invalid to exchange..." = As above but rather than change_from method it is the change_to method that passed an unsupported currency.
+	
+	"Invalid return type given..." = The exchange() method was passed an return type that was not supported. Supported return types are:
+		exchange("amount") => Returns string containing amount. Example : 1
+		exchange("from_currency") => Returns string containing the change from currencies name. Example : Euro
+		exchange("rate") => Returns string containing the rate. Example: 1.40700
+		exchange("to_currency") => Returns string containing the change to currencies name. Example : U.S. dollars
