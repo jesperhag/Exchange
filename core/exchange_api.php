@@ -14,7 +14,7 @@ class Exchange{
 "AUD", "BHD", "BRL", "BGN", "CLP", "DKK", "DOP", "EGP", "EUR", "FJD", "PHP", "AED", "HKD", "INR", "ISK", "ILS", "JPY", "JOD", "CAD", "KES", "CNY", "HRK", "KWD", "LVL", "LTL", "MYR", "MUR", "MXN", "NOK", "NZD", "PLN", "RON", "RUB", "SAR", "CHF", "SGD", "GBP", "ZAR", "TWD", "THB", "CZK", "TTD", "TRY", "HUF", "USD", "SEK"
 	);
 	
-	var $pattern = '/<b>([\d+]+)([\w\s\.]+)+=\s+(\d+\.\d+)+([\w\s\.]+)+<\/b>/';
+	private $pattern = '/<b>([\d\.\d\s]+)([\w\s\.]+)+=\s+([\d\.\d\s]+)+([\w\s\.]+)+<\/b>/';
 	
 	function get_contents($url){
 
@@ -25,7 +25,9 @@ class Exchange{
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
  
 		$contents = curl_exec($ch); 
-
+		
+		$contents = str_replace("&nbsp;", " ", $contents);
+		
 		curl_close($ch);
 		
 		return $contents;
@@ -84,7 +86,6 @@ class Exchange{
 		$subject = $this->get_contents($url);
 
 		if( preg_match($this->pattern, $subject, $matches) ){
-
 			$matches = array(
 				"amount" => $matches[1],
 				"from_currency" => $matches[2],
@@ -126,13 +127,16 @@ class Exchange{
 		$subject = $this->get_contents($url);
 
 		if( preg_match($this->pattern, $subject, $matches) ){
-
+			
+			$matches[3] = preg_replace("/([^\d\.])+/", "", $matches[3]);
+			
 			$matches = array(
 				"amount" => $matches[1],
 				"from_currency" => $matches[2],
 				"rate" => $matches[3],
 				"to_currency" => $matches[4]
 			);
+			
 			
 			return json_encode($matches);
 		}
